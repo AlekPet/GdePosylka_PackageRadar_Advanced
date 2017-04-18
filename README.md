@@ -1,4 +1,4 @@
-# GdePosylka_PackageRadar_Advanced
+# GdePosylka PackageRadar Advanced
 Advanced Check track number for gdeposylka.ru and packageradar.com<br>
 Раширенные возможности для отслеживания трек-кода на сайтах gdeposylka.ru и packageradar.com
 

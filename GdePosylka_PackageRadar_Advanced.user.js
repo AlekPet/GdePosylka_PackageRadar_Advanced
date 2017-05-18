@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.2
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
-// @author       AlekPet 2017 (alexepetrof@gmail.com)
+// @author       AlekPet 2017
 // @match        https://gdeposylka.ru/tracks*
 // @match       https://packageradar.com/tracks*
 // @grant GM_setValue

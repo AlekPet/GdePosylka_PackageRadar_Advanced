@@ -407,7 +407,7 @@ function make_abs(){
  
     var text_abs = ["","","",""];
     var otsl = [0,0,0,0];
-    for(g=0;g<dannie_o_trekax[0].split(",").length;g++){
+    for(var g=0;g<dannie_o_trekax[0].split(",").length;g++){
         
         var other_mag ="";
         if(/^A.*$/i.test(codes_names[0][g]) || /\[BG\]/i.test(codes_names[1][g])){
@@ -427,18 +427,18 @@ function make_abs(){
         
        if(codes_names[2][g].search(sel_lang.check_posil_dost)===0 ||gp_set.markers[codes_names[0][g]] === true){
       text_abs[0] += vis_menu.dost;
-            otsl[0]+=1;
+            otsl[0]+=rn_el.length>0 ? 1 : 0;
         }  else if(codes_names[2][g].search(sel_lang.check_prib_v_pubkt)===0 || codes_names[2][g].search("Хранение - Установленный срок хранения")===0){
       text_abs[1] += vis_menu.priv_v_puntk_i_xran;
-            otsl[1]+=1; 
+            otsl[1]+=rn_el.length>0 ? 1 : 0;
             dannie_o_trekax[4]+=codes_names[0][g]+((g< rn_el.length-1)?",":"");
         } else if(codes_names[2][g].search(sel_lang.check_info_poka_net)===0){
       text_abs[3] += vis_menu.no_info;
-            otsl[3]+=1;
+            otsl[3]+=rn_el.length>0 ? 1 : 0;
             dannie_o_trekax[4]+=codes_names[0][g]+((g< rn_el.length-1)?",":"");
             } else {
       text_abs[2] += vis_menu.otsleshiv;
-            otsl[2]+=1;
+            otsl[2]+=rn_el.length>0 ? 1 : 0;
             dannie_o_trekax[4]+=codes_names[0][g]+((g< rn_el.length-1)?",":"");
             }
     }
@@ -486,9 +486,9 @@ function make_abs(){
                     }
                  // Main pole visible
                 if(codes_names[0][tek_z] === k && gp_set.markers[codes_names[0][tek_z]] || codes_names[2][tek_z].search(sel_lang.check_posil_dost)===0){ // add> codes_names[2][tek_z].search(sel_lang.check_posil_dost)===0
-                rn_el[tek_z].children[0].className="track ab_style_complete";
+                if(rn_el.length>0) rn_el[tek_z].children[0].className="track ab_style_complete";
                 } else if(!gp_set.markers[codes_names[0][tek_z]]){
-                rn_el[tek_z].children[0].className=rn_el[tek_z].children[0].className.replace(/\s+ab_style_complete/i,"");    
+                 if(rn_el.length>0)  rn_el[tek_z].children[0].className=rn_el[tek_z].children[0].className.replace(/\s+ab_style_complete/i,"");
                 }
                 //
                 }
@@ -496,8 +496,8 @@ function make_abs(){
 // Marker load end  
     }
        abs_div.children[0].innerHTML+="<p style=\"margin: 0;font-size: 10px;font-weight: bold;\"><span style=\"color:lime;\" title=\""+sel_lang.polucheno+"!\">"+
-           sel_lang.polucheno+": "+count_pol+"</span><span style=\"color:orange;\" title=\""+sel_lang.vsego_posil+"\"> "+sel_lang.iz+" "+dannie_o_trekax[0].split(",").length+
-           "</span></p><p style=\"font-size: 10px;margin: 0;font-weight: bold;\"><span style=\"color:cyan;\" title=\""+sel_lang.ne_poluch+"!\"> "+sel_lang.ostalos+": "+(dannie_o_trekax[0].split(",").length-count_pol)+"</span></p>";        
+           sel_lang.polucheno+": "+count_pol+"</span><span style=\"color:orange;\" title=\""+sel_lang.vsego_posil+"\"> "+sel_lang.iz+" "+((rn_el.length>0) ? dannie_o_trekax[0].split(",").length:0)+
+           "</span></p><p style=\"font-size: 10px;margin: 0;font-weight: bold;\"><span style=\"color:cyan;\" title=\""+sel_lang.ne_poluch+"!\"> "+sel_lang.ostalos+": "+((rn_el.length>0) ? (dannie_o_trekax[0].split(",").length-count_pol):0)+"</span></p>";
 // Markers end 
 }
 // end abs menu function    
@@ -1017,7 +1017,8 @@ var li = document.createElement("div");
 }
 // End - Проверка трека напротив каждого трека     
     
-function init(){    
+function init(){
+try{
 // -------------------------------- Init -----------------------------
 var i_setting_div = document.createElement("div"); 
 var i_setting_div_caption = document.createElement("div");
@@ -1101,10 +1102,12 @@ var checkbox_label = document.createElement("label");
     checkbox_div.appendChild(i_setting_div);
     //document.getElementsByClassName("container")[1].lastChild.appendChild(checkbox_div);
     document.getElementsByClassName("container")[2].parentNode.insertBefore(checkbox_div, document.getElementsByClassName("container")[2]);
-//--------------------    
-    NaprotuvKashdogo();  // Naprotiv kashdogo treka slushba ontsleshivaniya      
+//--------------------
+
+    NaprotuvKashdogo();  // Naprotiv kashdogo treka slushba ontsleshivaniya
     make_abs(); // Make absolute window left     
     upperPanel(); // Verxnya panel so slushbami otsleshivaniya
+} catch (e){console.log(e);}
 }
     
     

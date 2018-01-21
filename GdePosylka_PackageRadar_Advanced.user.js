@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/AlekPet/
 // @version      1.5
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)

@@ -4,6 +4,7 @@
 // @version      1.5
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
+// @license     MIT;
 // @match        http*://gdeposylka.ru/tracks*
 // @match       http*://packageradar.com/tracks*
 // @updateURL    https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js

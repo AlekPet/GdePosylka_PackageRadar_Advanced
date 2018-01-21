@@ -6,6 +6,9 @@
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @match        https://gdeposylka.ru/tracks*
 // @match       https://packageradar.com/tracks*
+// @updateURL    https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js
+// @downloadURL  https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js
+// @run-at document-end
 // @grant GM_setValue
 // @grant GM_getValue
 // @grant GM_addStyle

@@ -11,6 +11,7 @@
 // @downloadURL  https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js
 // @icon          https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/assets/images/icon.png
 // @run-at document-end
+// @noframes
 // @grant GM_setValue
 // @grant GM_getValue
 // @grant GM_addStyle

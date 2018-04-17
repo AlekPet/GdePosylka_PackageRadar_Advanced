@@ -128,7 +128,7 @@ GM_addStyle("\
 ");
 // Styles
 
-(function() {
+(function() { 
 var gp_value = GM_getValue('gp_set'),
     gp_set = (gp_value)?JSON.parse(gp_value):{},
 
@@ -265,7 +265,7 @@ var lang_str = {
        menu_add: "Меню добавления службы",
        button_add: "Добавить службу",
        q_del: "Вы хотите удалить эту(и) службу(ы)?",
-       danie_edit : "Данные служб отредактированны!",
+       danie_edit : "Данные отредактированны!",
        q_save: "Сохранить изменения?",
        error_serv_name: "Ошибка в названии службы!\nНазвание службы отслеживания, не задано, в строке №",
        error_serv_link: "Ошибка ссылки!\nСсылка службы отслеживания, задана неверно, в строке №",
@@ -362,7 +362,7 @@ var lang_str = {
       menu_add: "Menu add service",
       button_add: "Add service",
       q_del: "You want to remove this(and) service(s)?",
-      danie_edit : "Service data is modified!",
+      danie_edit : "Data is modified!",
       q_save: "Save changes?",
       error_serv_name: "Error in service name!\nazvanie tracking service, is not set in line#",
       error_serv_link: "reference Error!\psylla tracking service, is incorrect, in line#",

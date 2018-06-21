@@ -441,7 +441,7 @@ for (var propvalue in obj) {
 // Проверить только не полученные
 function only_ne_poluch_button(){
 var cur_el=arguments[0].target;
-    if(!gp_set.setting || gp_set.setting === undefined){
+    if(!gp_set.hasOwnProperty('setting')){
     gp_set.setting={};    
     }
     gp_set.setting.tolko_ne_poluch = !cur_el.parentElement.children[1].checked;
@@ -1501,7 +1501,8 @@ $("#i_pop_menu_track_button_add").click(function(){
 
     // Трэк-код
     if(i_pop_menu_track_input_trackcode.length < 1 || /^\s*$/.test(i_pop_menu_track_input_trackcode) || /\W|_/g.test(i_pop_menu_track_input_trackcode)){
-        let matchSpecSymb = i_pop_menu_track_input_trackcode.match(/\W|_/g).join(" ");
+        let matchSpecSymb = i_pop_menu_track_input_trackcode.match(/\W|_/g)
+        matchSpecSymb = matchSpecSymb?matchSpecSymb.join(" "):"";
         alert(sel_lang.u_error_trackcode+" "+matchSpecSymb+".");
         $("#i_pop_menu_track_input_trackcode").parent().find("span").addClass("error_span_input error_icon_input").fadeIn(1000);
         $("#i_pop_menu_track_input_trackcode").css("border-color","red");
@@ -1972,6 +1973,10 @@ var checkbox_label = document.createElement("label");
     checkbox_input.type="checkbox";
     checkbox_input.className="checkbox";
     checkbox_input.id="checkbox";
+
+    if(!gp_set.hasOwnProperty('setting')){
+        gp_set.setting={'tolko_ne_poluch':false};
+    }
     checkbox_input.checked = gp_set.setting.tolko_ne_poluch;
     
     checkbox_label.setAttribute("for","checkbox");

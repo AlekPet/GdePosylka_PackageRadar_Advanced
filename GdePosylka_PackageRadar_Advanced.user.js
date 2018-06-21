@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6
+// @version      1.6.1
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -169,7 +169,7 @@ var elem = [
     ["Почта России","https://www.pochta.ru/tracking#",1,0],
     ["Post2go","https://post2go.ru",0,2],
     ["Postal.ninja","http://postal.ninja/ru/tracks",0,2],
-    ["Flytexpress","http://flytexpress.com/Tracking/NewTracking.aspx?trackNumber=",1,1],
+    ["Flytexpress","http://flytexpress.com/En/Home/LogisticsTracking#orderIds=",1,1],
     ["Gsconto","http://www.gsconto.com/ru/tracker/show/",1,1],
     ["DHL Global Mail","https://webtrack.dhlglobalmail.com/?trackingnumber=",1,0]    
     ],
@@ -1172,6 +1172,7 @@ var li = document.createElement("div");
 // End - Проверка трека напротив каждого трека
 
 // ====================================== Пользовательские коды - Start  ======================================
+
 $.fn.CanvasDraw = function(param){
     var canv = this,
         bgcolor = param.bgcolor,
@@ -1181,22 +1182,25 @@ $.fn.CanvasDraw = function(param){
         servname = param.servname,
         size = param.size,
 
-        w = canv[0].width = size,
-        h = canv[0].height = size,
+        w = canv[0].width = size+6,
+        h = canv[0].height = size+6,
         ctx;
 
  if(ctx = canv[0].getContext('2d')){
-    ctx.fillStyle = bgcolor;
-    ctx.fillRect(0,0,w,h);
+     ctx.fillStyle = bgcolor;
+     ctx.fillRect(0,0,w,h);
 
-    let textW_Pos = (w/2)-ctx.measureText(servname).width/2,
-        textH_Pos = h/1.9;
-    ctx.font="10px Georgia";
-    ctx.fillStyle = text_color;
-    ctx.fillText(servname,textW_Pos,textH_Pos);
-    ctx.strokeStyle = bord_color;
-    ctx.lineWidth = 6;
-    ctx.strokeRect(0,0,w,h);
+     let textW_Pos = w/2,
+         textH_Pos = h/2
+
+     ctx.font="10px Georgia";
+     ctx.textAlign="center";
+     ctx.fillStyle = text_color;
+     ctx.fillText(servname,textW_Pos,textH_Pos);
+     // Stroke
+     ctx.strokeStyle = bord_color;
+     ctx.lineWidth = 6;
+     ctx.strokeRect(0,0,w,h);
      return canv;
 
  } else {
@@ -1386,7 +1390,7 @@ var $pop_meuni = $("<div id='i_pop_menu_track' style='display:none;position: fix
                    \</div>\
                    \<div style='display: table-cell;width: 50%;text-align: center;padding: 5px;vertical-align: middle;'>\
                    \<div style='font-weight: bold;margin-bottom: 5px;'>"+sel_lang.u_icon+":</div>\
-                   \<canvas style='box-shadow: 4px 4px 8px #616060;'>Canvas not support!</canvas></div>\
+                   \<canvas style='box-shadow: 4px 4px 8px #616060;zoom: 1.5;border-radius: 5px;'>Canvas not support!</canvas></div>\
                    \</div>\
                    \<p style='text-align: center;margin-bottom: 15px;'>"+sel_lang.u_viewOnMain+": <input id='i_pop_menu_track_input_visible' type='checkbox' checked='true' /></p>\
                    \<div disabled id='i_pop_menu_track_button_add' style='width: 150px;margin: 5px auto;height: 30px;line-height: 30px;background: linear-gradient(#75f575,#16bf02);color: white;border-radius: 8px;box-shadow: 2px 2px 5px silver;cursor:pointer; text-align:center;'>"+sel_lang.button_add+"</div>\

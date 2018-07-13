@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.1
+// @version      1.6.2
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -9,8 +9,8 @@
 // @match       https://packageradar.com/tracks*
 // @match        https://gdeposylka.ru/form*
 // @match       https://packageradar.com/form*
-// @updateURL    https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js
-// @downloadURL  https://github.com/AlekPet/GdePosylka_PackageRadar_Advanced/raw/master/GdePosylka_PackageRadar_Advanced.user.js
+// @updateURL    https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/GdePosylka_PackageRadar_Advanced.user.js
+// @downloadURL  https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/GdePosylka_PackageRadar_Advanced.user.js
 // @icon          https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/assets/images/icon.png
 // @run-at document-end
 // @noframes

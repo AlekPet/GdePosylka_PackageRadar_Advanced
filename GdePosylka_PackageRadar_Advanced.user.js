@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.3a
+// @version      1.6.4
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -50,10 +50,10 @@ var colors_style=getColorRND();
 GM_addStyle("\
 .track_service{border: 1px solid;    margin: 5px 5px;    padding: 2px; color: #e7dcdc;   text-shadow: 1px 1px 0px black;    cursor: pointer;    display: inline;}\
 .track_service:hover{color:yellow;} \
-li.li_style {float: left;}\
+li.li_style { display: inline-block;}\
 .li_style:hover>ul {display: block;}\
 .li_style ul{-webkit-transition: all 0.3s ease-in;    -moz-transition: all 0.3s ease-in;    -o-transition: all 0.3s ease-in;}\
-.ul_menu{position:absolute;z-index:99999999999999;border:1px solid;width:250px;top:23px;display:none;padding: 0;background-color: #1d2125;}\
+.ul_menu{position:absolute;z-index:99999999999999;border:1px solid;width:250px;display:none;padding: 0;background-color: #1d2125;}\
 .li_menu{list-style: none;    padding: 0 10px;    min-width: 200px;    float: none;    background-color: rgba(46,73,89,.5);    font-family: Roboto,Helvetica,Arial,sans-serif;}\
 .li_menu:hover{background-color: rgba(46,73,89,.5);}\
 .a_menu{text-decoration: none;    color: #77def7;    display: inline-block;    font-size: 16px;    line-height: 33px;    padding-left: 5px;    width: 100%;}\
@@ -61,7 +61,7 @@ li.li_style {float: left;}\
 .li_menu:hover {background: #01ffc2;}\
 .ul_menu li{-webkit-transition: all 0.3s ease-in;    -moz-transition: all 0.3s ease-in;    -o-transition: all 0.3s ease-in;}\
 \
-#abs_div{position:fixed;top:30%;left:30px;border:1px solid;border-style: dashed;padding: 5px;overflow:auto;background-color: white;transform: translateY(-50%);}\
+#abs_div{position:fixed;top:30vh;left:30px;border:1px solid;border-style: dashed;padding: 5px;overflow:auto;background-color: white;transform: translateY(-50%);}\
 .ab_style:hover{background: linear-gradient("+colors_style+");color:white !important;} \
 .ab_style_complete{background: linear-gradient(white,#12ff45);} \
 .ab_styles:hover{background: linear-gradient("+colors_style+");color:white !important;} \
@@ -649,7 +649,7 @@ li.li_style {float: left;}\
                 console.log(111)
                 let divbox = $("<div id='iframe_site_out'>").attr('style','position:absolute;z-index:9999;top:50%;left:50%;transform: translate(-50%, -50%);box-shadow:4px 4px 8px silver;border:1px solid darkgrey;'),
                     divX = $("<div class='iframebox_x'>").text("X").click(function(e){
-                        $(e.target.parentNode).fadeToggle('slow')
+                            $(e.target.parentNode).fadeToggle('slow')
                     }),
                     outp = $("<div id='iframe_site_body'>")
                 outp.append(frame)
@@ -713,7 +713,7 @@ li.li_style {float: left;}\
 
     // Start - Верхняя панель со службами отслеживания
     function upperPanel(){
-        let liel= document.getElementsByClassName("nav navbar-center")[0] || null;
+        let liel= document.getElementsByClassName("my-navbar-center")[0] || null;
         if(liel){
 
             if(arguments[0] === "clear") $(liel).empty();
@@ -1981,12 +1981,13 @@ li.li_style {float: left;}\
             i_smoke_div_fog.className = "i_smoke_div_fog";
             document.body.appendChild(i_smoke_div_fog);
 
+
             var divli = document.createElement("ul");
-            divli.setAttribute('style', `clear: left; padding-top: 20px; width: 90%; margin: 0 auto;`)
-            divli.className = "nav navbar-center";
-            var liel= document.getElementsByClassName("navbar navbar-inverse")[0].getElementsByClassName("container")[0] || null;
+            divli.setAttribute('style', `text-align: center; width: 80%; margin: 10px auto;`)
+            divli.className = "my-navbar-center";
+            var liel= document.getElementsByClassName("navbar")[0] || null;
             if(liel){
-                liel.insertBefore(divli,document.getElementsByClassName("nav navbar-nav navbar-right")[0]);
+                document.querySelector("header").insertBefore(divli, liel.nextElementSibling);
             }
 
             i_setting.addEventListener("click", setting_window);

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.4
+// @version      1.6.5
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -646,10 +646,9 @@ li.li_style { display: inline-block;}\
             let frame = $("<iframe width='560' height='315' frameborder='0' id='frame_site'>").attr({src:site_frame})
 
             if(!$("#iframe_site_out").length){
-                console.log(111)
                 let divbox = $("<div id='iframe_site_out'>").attr('style','position:absolute;z-index:9999;top:50%;left:50%;transform: translate(-50%, -50%);box-shadow:4px 4px 8px silver;border:1px solid darkgrey;'),
                     divX = $("<div class='iframebox_x'>").text("X").click(function(e){
-                            $(e.target.parentNode).fadeToggle('slow')
+                        $(e.target.parentNode).fadeToggle('slow')
                     }),
                     outp = $("<div id='iframe_site_body'>")
                 outp.append(frame)
@@ -1159,13 +1158,21 @@ li.li_style { display: inline-block;}\
     var codes_names = [];
 
     function NaprotuvKashdogo(){
+
         var rn_el=document.getElementsByClassName("track-container");
         var title_wrapper = document.getElementsByClassName("title-wrapper");
         var tek_pol=document.getElementsByClassName("checkpoint-status");
+        var track_list=document.getElementsByClassName("track-list")[0]
+
+        /*if(window.location.href.includes('archive') && !confirm(`Кодов отслеживания найдено '${rn_el.length}', большое количество кодов, может замедлить работу кода!
+Загрузить кнопки отслеживания? `)){
+            alert('Загрузка кодов была отменена!')
+            return
+        }*/
 
         if(rn_el && title_wrapper && tek_pol){
             for(let i=0;i< rn_el.length;i++){
-                var el_a=title_wrapper[i].getElementsByClassName("tracking-number")[0].innerText;
+                var el_a=title_wrapper[i].children[1].textContent;
                 //var el_a=rn_el[i].getElementsByTagName("a")[0].innerText;
                 //var el_div=(rn_el.className !="tracking-number")?rn_el[i].getElementsByTagName("a")[1].innerText:rn_el[i].getElementsByTagName("div")[0].innerText;
                 //
@@ -1180,8 +1187,8 @@ li.li_style { display: inline-block;}\
                 li_body.setAttribute("style", "margin-bottom: 25px;background: #f9f9f9;");
                 li_body1.setAttribute("style", "position:absolute;");
                 li_body1.className = "li_body_naprotiv_kashdogo";
-                document.getElementsByClassName("track-list")[0].insertBefore(li_body,rn_el[i].nextSibling);
-                document.getElementsByClassName("track-list")[0].insertBefore(li_body1,rn_el[i].nextSibling);
+                track_list.insertBefore(li_body,rn_el[i].nextSibling);
+                track_list.insertBefore(li_body1,rn_el[i].nextSibling);
 
                 for(let j=0;j<gp_set.services.length;j++){
                     if(gp_set.services[j][2]){

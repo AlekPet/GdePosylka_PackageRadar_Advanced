@@ -1,12 +1,14 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.5
+// @version      1.6.6
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
 // @match        https://gdeposylka.ru/tracks*
+// @match        https://gdeposylka.ru/courier/*
 // @match       https://packageradar.com/tracks*
+// @match       https://packageradar.com/courier/*
 // @match        https://gdeposylka.ru/form*
 // @match       https://packageradar.com/form*
 // @updateURL    https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/GdePosylka_PackageRadar_Advanced.user.js
@@ -61,11 +63,12 @@ li.li_style { display: inline-block;}\
 .li_menu:hover {background: #01ffc2;}\
 .ul_menu li{-webkit-transition: all 0.3s ease-in;    -moz-transition: all 0.3s ease-in;    -o-transition: all 0.3s ease-in;}\
 \
-#abs_div{position:fixed;top:30vh;left:30px;border:1px solid;border-style: dashed;padding: 5px;overflow:auto;background-color: white;transform: translateY(-50%);}\
+#abs_div{position:fixed;top:40vh;left:30px;border:1px solid;border-style: dashed;padding: 5px;overflow:auto;background-color: white;transform: translateY(-50%);}\
+.ab_styles {text-overflow:ellipsis;width: 200px;overflow: hidden; display: flex;}\
 .ab_style:hover{background: linear-gradient("+colors_style+");color:white !important;} \
 .ab_style_complete{background: linear-gradient(white,#12ff45);} \
 .ab_styles:hover{background: linear-gradient("+colors_style+");color:white !important;} \
-.ab_styles:after{    content: \" Получил\";    color: white;    background: linear-gradient(#ff8100,#ffb714);    margin-left: 10px;    padding: 0 2px 0 2px;    font-size: 10px; line-height: 1.5;}\
+.ab_styles:after{content: \" Получил\";color: white;    background: linear-gradient(#ff8100,#ffb714);    margin-left: 10px;    padding: 0 2px 0 2px;    font-size: 10px; line-height: 1.5;align-self: center;}\
 .pop_options{border:1px solid;background: linear-gradient(silver,black);color:white;cursor:pointer;}\
 .pop_options:hover{color:yellow;}\
 .abs_div_cat{border: 1px solid;padding: 5px;margin-bottom:10px;}\
@@ -133,7 +136,8 @@ li.li_style { display: inline-block;}\
 // Styles
 
 (function() { 
-    var gp_value = GM_getValue('gp_set'),
+    var $ = $ = window.jQuery,
+        gp_value = GM_getValue('gp_set'),
         gp_set = (gp_value)?JSON.parse(gp_value):{},
 
         debug = false;
@@ -646,7 +650,7 @@ li.li_style { display: inline-block;}\
             let frame = $("<iframe width='560' height='315' frameborder='0' id='frame_site'>").attr({src:site_frame})
 
             if(!$("#iframe_site_out").length){
-                let divbox = $("<div id='iframe_site_out'>").attr('style','position:absolute;z-index:9999;top:50%;left:50%;transform: translate(-50%, -50%);box-shadow:4px 4px 8px silver;border:1px solid darkgrey;'),
+                let divbox = $("<div id='iframe_site_out'>").attr('style','position:absolute;z-index:9999;top:50%;left:50%;transform: translate(-50%, -50%);box-shadow:4px 4px 8px silver;border:1px solid darkgrey;background: #fff;'),
                     divX = $("<div class='iframebox_x'>").text("X").click(function(e){
                         $(e.target.parentNode).fadeToggle('slow')
                     }),
@@ -713,6 +717,7 @@ li.li_style { display: inline-block;}\
     // Start - Верхняя панель со службами отслеживания
     function upperPanel(){
         let liel= document.getElementsByClassName("my-navbar-center")[0] || null;
+
         if(liel){
 
             if(arguments[0] === "clear") $(liel).empty();
@@ -834,7 +839,7 @@ li.li_style { display: inline-block;}\
                 if(j === 2){
                     input_el = document.createElement("select");
                     input_el.innerHTML = "<option value='0'>false</option><option value='1'>true</option>";
-                    input_el.value =  gp_set.services[i][j];
+                    input_el.value = gp_set.services[i][j];
 
                     if(JSON.parse(gp_set.services[i][j])){input_el.setAttribute("style","background: linear-gradient(#d9ff5a,#16ff73)");} else{ input_el.setAttribute("style","background: linear-gradient(#eeffee,#ff9bb7)");}
 
@@ -852,9 +857,9 @@ li.li_style { display: inline-block;}\
                     if(j === 3){
                         input_el = document.createElement("select");
                         input_el.innerHTML = "<option value='0'>"+sel_lang.type_per[0]+"</option><option value='1'>"+sel_lang.type_per[1]+"</option><option value='2'>"+sel_lang.type_per[2]+"</option><option value='3'>"+sel_lang.type_per[3]+"</option>";
-                        input_el.value =  gp_set.services[i][j];
+                        input_el.value = gp_set.services[i][j];
 
-                    }else{
+                    } else{
                         input_el.type = "text";
                     }
 
@@ -1150,7 +1155,7 @@ li.li_style { display: inline-block;}\
 
         });
 
-    }  // show setting end
+    } // show setting end
     //--- End Setting edit, add, delete services
 
     // Start - Проверка трека напротив каждого трека
@@ -1158,52 +1163,74 @@ li.li_style { display: inline-block;}\
     var codes_names = [];
 
     function NaprotuvKashdogo(){
+        if(!checkLocation("/courier")){
+            var rn_el=document.getElementsByClassName("track-container");
+            var title_wrapper = document.getElementsByClassName("title-wrapper");
+            var tek_pol=document.getElementsByClassName("checkpoint-status");
+            var track_list=document.getElementsByClassName("track-list")[0]
 
-        var rn_el=document.getElementsByClassName("track-container");
-        var title_wrapper = document.getElementsByClassName("title-wrapper");
-        var tek_pol=document.getElementsByClassName("checkpoint-status");
-        var track_list=document.getElementsByClassName("track-list")[0]
-
-        /*if(window.location.href.includes('archive') && !confirm(`Кодов отслеживания найдено '${rn_el.length}', большое количество кодов, может замедлить работу кода!
+            /*if(window.location.href.includes('archive') && !confirm(`Кодов отслеживания найдено '${rn_el.length}', большое количество кодов, может замедлить работу кода!
 Загрузить кнопки отслеживания? `)){
             alert('Загрузка кодов была отменена!')
             return
         }*/
 
-        if(rn_el && title_wrapper && tek_pol){
-            for(let i=0;i< rn_el.length;i++){
-                var el_a=title_wrapper[i].children[1].textContent;
-                //var el_a=rn_el[i].getElementsByTagName("a")[0].innerText;
-                //var el_div=(rn_el.className !="tracking-number")?rn_el[i].getElementsByTagName("a")[1].innerText:rn_el[i].getElementsByTagName("div")[0].innerText;
-                //
-                dannie_o_trekax[0]+=el_a+((i<rn_el.length-1)?",":""); // Track Number
-                dannie_o_trekax[1]+=(title_wrapper[i].firstChild.data).replace(/\s+(.*)/i,"$1")+((i< rn_el.length-1)?"|":""); // Name order
-                dannie_o_trekax[2]+= el_a+" - "+(title_wrapper[i].firstChild.data).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+((i< rn_el.length-1)?",":""); // Track Number + Name order
-                dannie_o_trekax[3]+=(tek_pol[i].firstChild.data).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+((i< rn_el.length-1)?"|":""); // Status order
-                title_wrapper[i].setAttribute("title", (title_wrapper[i].firstChild.data).replace(/\s+(.*)/i,"$1")+((i< rn_el.length-1)?"|":""));
-                //
-                var li_body = document.createElement("div");
-                var li_body1 = document.createElement("div");
-                li_body.setAttribute("style", "margin-bottom: 25px;background: #f9f9f9;");
-                li_body1.setAttribute("style", "position:absolute;");
-                li_body1.className = "li_body_naprotiv_kashdogo";
-                track_list.insertBefore(li_body,rn_el[i].nextSibling);
-                track_list.insertBefore(li_body1,rn_el[i].nextSibling);
+            if(rn_el && title_wrapper && tek_pol){
+                for(let i=0;i< rn_el.length;i++){
+                    var el_a=title_wrapper[i].children[1].textContent;
+                    //var el_a=rn_el[i].getElementsByTagName("a")[0].innerText;
+                    //var el_div=(rn_el.className !="tracking-number")?rn_el[i].getElementsByTagName("a")[1].innerText:rn_el[i].getElementsByTagName("div")[0].innerText;
+                    //
+                    dannie_o_trekax[0]+=el_a+((i<rn_el.length-1)?",":""); // Track Number
+                    dannie_o_trekax[1]+=(title_wrapper[i].firstChild.data).replace(/\s+(.*)/i,"$1")+((i< rn_el.length-1)?"|":""); // Name order
+                    dannie_o_trekax[2]+= el_a+" - "+(title_wrapper[i].firstChild.data).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+((i< rn_el.length-1)?",":""); // Track Number + Name order
+                    dannie_o_trekax[3]+=(tek_pol[i].firstChild.data).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+((i< rn_el.length-1)?"|":""); // Status order
+                    title_wrapper[i].setAttribute("title", (title_wrapper[i].firstChild.data).replace(/\s+(.*)/i,"$1")+((i< rn_el.length-1)?"|":""));
+                    //
+                    let li_body = document.createElement("div"),
+                        li_body1 = document.createElement("div");
+                    li_body.setAttribute("style", "margin-bottom: 25px;background: #f9f9f9;");
+                    li_body1.setAttribute("style", "position:absolute;");
+                    li_body1.className = "li_body_naprotiv_kashdogo";
+                    track_list.insertBefore(li_body,rn_el[i].nextSibling);
+                    track_list.insertBefore(li_body1,rn_el[i].nextSibling);
 
+                    for(let j=0;j<gp_set.services.length;j++){
+                        if(gp_set.services[j][2]){
+                            let li = document.createElement("div");
+                            li.innerHTML='<span onclick="window.open(&quot;'+gp_set.services[j][1]+el_a+'&quot;);">'+gp_set.services[j][0]+'</span>';
+                            let rcol = getColorRND();
+                            li.setAttribute("style","background: linear-gradient("+rcol+");");
+                            li.className="track_service";
+                            li.title=sel_lang.otsl_na+gp_set.services[j][0];
+                            li_body1.appendChild(li);
+                        }
+                    }
+                }
+            } else {
+                alert(sel_lang.error_create_buttons);
+            }
+        } else {
+            if(!document.querySelector("section.common-info")){
+                let li_body = document.createElement("div"),
+                    pastAfter = document.querySelector("ol.breadcrumb"),
+                    title = document.querySelector("div.title strong").textContent
+                li_body.setAttribute("style", "padding:5px;text-align: center;");
+
+
+                pastAfter.parentNode.insertBefore(li_body,pastAfter.nextSibling);
                 for(let j=0;j<gp_set.services.length;j++){
                     if(gp_set.services[j][2]){
-                        let li = document.createElement("div");
-                        li.innerHTML='<span onclick="window.open(&quot;'+gp_set.services[j][1]+el_a+'&quot;);">'+gp_set.services[j][0]+'</span>';
-                        let rcol = getColorRND();
+                        let li = document.createElement("div"),
+                            rcol = getColorRND()
+                        li.innerHTML='<span onclick="window.open(&quot;'+gp_set.services[j][1]+title+'&quot;);">'+gp_set.services[j][0]+'</span>';
                         li.setAttribute("style","background: linear-gradient("+rcol+");");
                         li.className="track_service";
                         li.title=sel_lang.otsl_na+gp_set.services[j][0];
-                        li_body1.appendChild(li);
+                        li_body.appendChild(li);
                     }
                 }
             }
-        } else {
-            alert(sel_lang.error_create_buttons);
         }
     }
     // End - Проверка трека напротив каждого трека
@@ -1532,7 +1559,7 @@ li.li_style { display: inline-block;}\
                     // Tovar name
                     if(i_pop_menu_track_input_namegood.length < 1 || /^\s*$/.test(i_pop_menu_track_input_namegood)){
                         alert(sel_lang.nameTovarEmptyNoName);
-                        i_pop_menu_track_input_namegood =  sel_lang.nonameTovar;
+                        i_pop_menu_track_input_namegood = sel_lang.nonameTovar;
                         $("#i_pop_menu_track_input_namegood").val(i_pop_menu_track_input_namegood);
                     }
 
@@ -1725,7 +1752,7 @@ li.li_style { display: inline-block;}\
                         alert(sel_lang.u_error_fieldEmptyFull[0]+namePoleError+sel_lang.u_error_fieldEmptyFull[1]+stroke_error);
                         //alert(`Ошибка:\nПустое поле в столбце "${namePoleError}", строка №${stroke_error}`);
                         if(gp_set.my_tracks.hasOwnProperty(track_code)){
-                            let restoreNameProp =  poleDetect(this, gp_set.my_tracks, 'propName');
+                            let restoreNameProp = poleDetect(this, gp_set.my_tracks, 'propName');
 
                             $(this).val(gp_set.my_tracks[track_code][restoreNameProp]);
                         }
@@ -1753,7 +1780,7 @@ li.li_style { display: inline-block;}\
                             alert(sel_lang.u_error_colorFull[0]+namePoleError+sel_lang.u_error_colorFull[1]+stroke_error);
                             //alert(`Ошибка:\nЦвет указан неверно, в столбце "${namePoleError}", строка №${stroke_error}`);
                             if(gp_set.my_tracks.hasOwnProperty(track_code)){
-                                let restoreNameProp =  poleDetect(this, gp_set.my_tracks, 'propName');
+                                let restoreNameProp = poleDetect(this, gp_set.my_tracks, 'propName');
                                 $(this).val(checkColor({def_col:gp_set.my_tracks[track_code][restoreNameProp], new_col:$(this).val(), palitra:all_color}));
                                 save_value = false;
                                 return false;
@@ -1942,6 +1969,10 @@ li.li_style { display: inline-block;}\
     }
     // Пользовательские коды - End
 
+    function checkLocation(href){
+        return window.location.pathname.indexOf(href) != -1 ? true : false
+    }
+
     function init(){
         try{
             // -------------------------------- Init -----------------------------
@@ -1952,7 +1983,7 @@ li.li_style { display: inline-block;}\
 
             var i_setting_div_resetservices = document.createElement("div");
             i_setting_div_resetservices.innerText = sel_lang.reser_serv;
-            $(i_setting_div_resetservices).css({"float": "left",    "font-size": "0.8em",    "margin-top": "20px",    "cursor": "pointer"});
+            $(i_setting_div_resetservices).css({"float": "left", "font-size": "0.8em", "margin-top": "20px", "cursor": "pointer"});
             $(i_setting_div_resetservices).click(function(){
                 if(confirm(sel_lang.q_reset_serv)) {
                     resetDefaultServices();
@@ -2040,7 +2071,7 @@ li.li_style { display: inline-block;}\
             //--------------------
             myTracks(); // Пользовательские коды
             NaprotuvKashdogo(); // Naprotiv kashdogo treka slushba ontsleshivaniya
-            make_abs(); // Make absolute window left
+            if (!checkLocation("/courier") && !checkLocation("/form")) make_abs(); // Make absolute window left
             upperPanel(); // Verxnya panel so slushbami otsleshivaniya
             // checkAll();
 
@@ -2056,7 +2087,9 @@ li.li_style { display: inline-block;}\
             but.innerText = "Go";
             $(but).on('click', function(){
                 $.each(a,function(){
-                    $.ajax(a).done(handleModalResponse);
+                    $.ajax(a).done(function(resp){
+                        console.log(resp)
+                    });
                 })
             });
             document.body.appendChild(but)

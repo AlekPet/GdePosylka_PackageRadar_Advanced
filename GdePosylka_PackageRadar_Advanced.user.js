@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.7.2
+// @version      1.6.7.3
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -2250,7 +2250,7 @@ li.li_style { display: inline-block;}\
                         let idx = (ind+1)*2,
                             wait = idx*3000,
                             div = $('<div>')
-                        .css({'dispaly': 'none'})
+                        .css({'display': 'none'})
                         .addClass('update_all_infos_item')
                         .text(el)
                         .appendTo(uat)

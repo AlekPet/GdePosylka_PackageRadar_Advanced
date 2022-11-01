@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GdePosylka_PackageRadar_Advanced
 // @namespace    https://github.com/AlekPet/
-// @version      1.6.6
+// @version      1.6.7.2
 // @description  Advanced Check my track number packageradar | Раширенные возможности для отслеживания трек-кода на сайт gdeposylka
 // @author       AlekPet 2017 (alexepetrof@gmail.com)
 // @license     MIT; https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/LICENSE
@@ -16,6 +16,7 @@
 // @icon          https://raw.githubusercontent.com/AlekPet/GdePosylka_PackageRadar_Advanced/master/assets/images/icon.png
 // @run-at document-end
 // @noframes
+// @connect gdeposylka.ru
 // @grant GM_setValue
 // @grant GM_getValue
 // @grant GM_addStyle
@@ -74,24 +75,30 @@ li.li_style { display: inline-block;}\
 .abs_div_cat{border: 1px solid;padding: 5px;margin-bottom:10px;}\
 .abs_punkti{text-align:center; color: white; user-select: none; padding: 3px;}\
 \
-.all_box_scroll{    max-height: 500px;overflow-y: auto;}\
+.all_box_scroll{max-height: 500px;overflow-y: auto;}\
 .all_box_scroll::-webkit-scrollbar {   width: 12px;margin-left:20px;	float: left;}\
 .all_box_scroll::-webkit-scrollbar-track {background-color: #eaeaea; border-left: 1px solid #ccc;}\
 .all_box_scroll::-webkit-scrollbar-thumb {background-color: #c7587c;background-clip: padding-box;}\
 .all_box_scroll::-webkit-scrollbar-thumb:hover {  background-color: #823b69;}\
 \
-.checkbox_div{position: relative;    left: 400px;    top: -15px; width: 500px;   }\
+.checkbox_div{position:relative;display: flex;flex-direction: row;align-items: center;background: #f5f5f599;padding: 0 10px;}}\
 .checkbox{  vertical-align: top;  margin: 0 3px 0 0;  width: 17px;  height: 17px;}\
 .checkbox + label {  cursor: pointer;}\
-.checkbox:not(checked) {  position: absolute; opacity: 0;}\
-.checkbox:not(checked) + label {  position: relative; padding: 0 0 0 60px; }\
+.checkbox:not(checked) {  opacity: 0;}\
+.checkbox:not(checked) + label {  position: relative;vertical-align: top; }\
 .checkbox:not(checked) + label:before {  content: '';  position: absolute;  top: -4px;  left: 0;  width: 50px;  height: 26px;  border-radius: 13px;  background: #CDD1DA;  box-shadow: inset 0 2px 3px rgba(0,0,0,.2);}\
 .checkbox:not(checked) + label:after {  content: '';  position: absolute;  top: -2px;  left: 2px;  width: 22px;  height: 22px;  border-radius: 10px;  background: #FFF;  box-shadow: 0 2px 5px rgba(0,0,0,.3);  transition: all .2s;}\
 .checkbox:checked + label:before {background: #9FD468;}\
 .checkbox:checked + label:after {left: 26px;}\
 .checkbox:focus + label:before { box-shadow: 0 0 0 3px rgba(255,255,0,.5);}\
 \
-.i_setting {position: relative;    top: 15px;    cursor: pointer;font: normal normal normal 35px 'Font Awesome 5 Pro';  display: inline-block;  }\
+.tolko_ne_poluch {width: 25%;}\
+.user_codes_panel {width: 15%;}\
+.setting_box {width:10%}\
+.update_all_infos{position: absolute;width: 25%;left: 60%;top: 20%;text-align: center;    font-size: 0.8em;font-weight: bold;color: darkcyan;}\
+.update_all_infos_item{border: 1px solid silver;margin: 0 0 5px 0;background: linear-gradient(45deg, #9dffd2, #00ff4385);border-radius: 8px;}\
+\
+.i_setting {cursor: pointer;font: normal normal normal 35px 'Font Awesome 5 Pro';  display: inline-block;  }\
 .i_setting-set:before{content:\"\\f013\";    color: #ff8f00;}\
 .i_setting:hover{animation:my 2s infinite;}\
 .i_setting_div,.user_codesBox{position: fixed;    border: 1px solid silver;    width: 500px; top: 50%;    left: 50%;transform: translate(-50%,-50%);; display: none;background: linear-gradient(#ffffff,silver);z-index:9999999;box-shadow: 5px 5px 5px rgba(192, 192, 192, 0.26);}\
@@ -122,16 +129,22 @@ li.li_style { display: inline-block;}\
 @keyframes my{from{transform:rotate(0deg)}to{transform:rotate(359deg)}}\
 .i_smoke_div_fog{position: fixed;    display: none;    top: 0;    left: 0;    width: 100%;    height: 100%;    background: rgba(0,0,0,0.8);  z-index: 9999999;}\
 #i_pop_menu p{text-align: left;    margin-left: 40px;}\
+\
+#checkbox_button {    background: linear-gradient(45deg, #82b7db, #c5baff);border-radius: 6px;color: white;padding: 1px 10px;cursor: pointer;user-select: none;box-shadow: 2px 2px 5px silver;}\
+#checkbox_button:hover {background: linear-gradient(45deg, #c482db, #efbaff);}\
+\
 .error_icon_input:after{content:\"\\f057\";    color: orange;}\
 .error_span_input{font-family:FontAwesome;font-size: 1.9em;    vertical-align: middle; padding: 3px;display: none;}\
 \
-.user_buttonShow{padding: 5px 10px;border-radius: 8px;position: relative;left: 35px;top: 10px;user-select: none;cursor: pointer;background: linear-gradient(#9FD468, #49ad1f);color: white;box-shadow: 2px 2px 5px silver;}\
+.user_buttonShow{padding: 3px 10px;border-radius: 6px;user-select: none;cursor: pointer;background: linear-gradient(#9FD468, #49ad1f);color: white;box-shadow: 2px 2px 5px silver;}\
 .user_buttonShow.modify{top:0px;}\
 .user_buttonShow:hover{background: linear-gradient(#9FD468, #4ff30a);}\
 .user_codeListItem{padding: 5px;border: 1px solid green;border-radius: 8px;margin: 5px;background: linear-gradient(#70f7ca,#0a714b);color: white;}\
 \
 .iframebox_x{position: absolute;    left: 96%;top: -5%;padding: 12px;background: silver;border-radius: 100%;color: darkred;border: 1px solid #6a1d1d;line-height: 0.7;cursor: pointer;box-shadow: 2px 4px 5px silver;}\
 #i_pop_menu_track{position: fixed;width: 330px;left: 50%;top: 50%;border: 1px solid silver;background: linear-gradient(#c1c1c1,white);z-index: 9999999;transform:translate(-50%,-50%);border-radius: 8px;}\
+.progress_line{height: 2px;  margin: 1px 0; border-radius: 6px; animation: 0.7s progress_anim alternate ease infinite;}\
+@keyframes progress_anim {0% {    background: linear-gradient(90deg, #7dff9f 0%, #7dff9f 0, white 0);  }  10% {    background: linear-gradient(90deg, #7dff9f 10%, #7dff9f 0, white 0);  }  20% {    background: linear-gradient(90deg, #7dff9f 20%, #7dff9f 0, white 0);  }  30% {    background: linear-gradient(90deg, #7dff9f 30%, #7dff9f 0, white 0);  }  40% {    background: linear-gradient(90deg, #7dff9f 40%, #7dff9f 0, white 0);  }  50% {    background: linear-gradient(90deg, #7dff9f 50%, #7dff9f 0, white 0);  }  60% {    background: linear-gradient(90deg, #7dff9f 60%, #7dff9f 0, white 0);  }  70% {    background: linear-gradient(90deg, #7dff9f 70%, #7dff9f 0, white 0);  }  80% {    background: linear-gradient(90deg, #7dff9f 80%, #7dff9f 0, white 0);  }  90% {    background: linear-gradient(90deg, #7dff9f 90%, #7dff9f 0, white 0);  }  100% {    background: linear-gradient(90deg, #7dff9f 100%, #7dff9f 0, white 0);  }}\
 ");
 // Styles
 
@@ -302,6 +315,7 @@ li.li_style { display: inline-block;}\
             nameTovarEmptyNoName: "Названме товара не указано, будет использ. \"Без названия\"",
             nonameTovar: "Без названия",
             listUserTrackEmptyAddTrack: "Список пуст! Нажмите кнопку Создать, чтобы добавить свой код!",
+            update_all_codes: 'Обновить всё',
             // Form add user track
             u_nameServ: 'Название службы',
             u_linkServ: 'Ссылка службы',
@@ -319,7 +333,8 @@ li.li_style { display: inline-block;}\
             u_error_trackcodeChangeFull: ["Внимание:\nПоле трэк-кода, было изменено на новое значение, в столбце ",", строка №",", вы действительно хотите изменить значание?"],
             u_error_fieldEmptyFull: ["Ошибка:\nПустое поле в столбце ",", строка №"],
             u_error_FullError: ["Ошибка:\n"," указана неверно, в строке №"],
-            u_error_colorFull: ["Ошибка:\nЦвет указан неверно, в столбце ",", строка №"]
+            u_error_colorFull: ["Ошибка:\nЦвет указан неверно, в столбце ",", строка №"],
+            update_all_tracks: {ok:'Успешно ->',already:'Проверка уже была -> ',confirm:'Хотите обновить все коды?',worknow:'Дождитесь обновления кодов!'}
         },
         en:{
             gosite:"Go to Site",
@@ -400,6 +415,7 @@ li.li_style { display: inline-block;}\
             nameTovarEmptyNoName: "The product name is not specified, will be used \"Untitled \"",
             nonameTovar: "Untitled",
             listUserTrackEmptyAddTrack: "The list is empty! Click the Create button to add your code!",
+            update_all_codes: 'Update all',
             // Form add user track
             u_nameServ: 'Service Name',
             u_linkServ: 'Service reference',
@@ -417,7 +433,8 @@ li.li_style { display: inline-block;}\
             u_error_trackcodeChangeFull: ["Warning:\nThe track code field has been changed to a new value, in the column ", ", line No.", "do you really want to change the value?"],
             u_error_fieldEmptyFull: ["Error:\nPush field in column ", ", line No."],
             u_error_FullError: ["Error:\n", "invalid in line No."],
-            u_error_colorFull: ["Error:\nThe color is incorrect, in the column ", ", line No."]
+            u_error_colorFull: ["Error:\nThe color is incorrect, in the column ", ", line No."],
+            update_all_tracks: {ok:'Successful ->',already:'Verification has already been done -> ',confirm:'Do you want to update all codes?',worknow:'Wait for updating codes!'}
         }
     };
 
@@ -446,6 +463,10 @@ li.li_style { display: inline-block;}\
             }
         }
         return keys;
+    }
+
+    function CheckHost(name){
+        return location.href.includes(name) ? true : false
     }
 
     // Проверить только не полученные
@@ -1912,7 +1933,7 @@ li.li_style { display: inline-block;}\
                     userTracksItems(u_codesBox);
                     u_codesBox.append(datalist);
 
-                    $(".checkbox_div").append(u_codesBox);
+                    $(".user_codes_panel").append(u_codesBox);
 
                     // Обработчики событий
                     // Кнопка закрыть
@@ -1958,7 +1979,7 @@ li.li_style { display: inline-block;}\
             if(window.location.pathname.indexOf("/form")>-1){
                 $("div.container.tracking-form").find(".help-block li").append(u_codesButton)
             } else {
-                $(".checkbox_div").append(u_codesButton);
+                $(".user_codes_panel").append(u_codesButton);
             }
 
             onStartViewUserTracks();
@@ -1971,6 +1992,42 @@ li.li_style { display: inline-block;}\
 
     function checkLocation(href){
         return window.location.pathname.indexOf(href) != -1 ? true : false
+    }
+
+    function actives_tracks(){
+        if(!gp_set.setting.hasOwnProperty('actives_tracks')){
+            gp_set.setting.actives_tracks = []
+        }
+
+        let changeTracks = [false,false],
+            tracksActive = $(".tracking-number").map((indx,el)=>el.getAttribute('href'))
+
+        // Delete not isset tracks
+        if(tracksActive.length){
+            const saveActiveTrack = [...gp_set.setting.actives_tracks]
+
+            for(let atrack of saveActiveTrack){
+                const indexFind = tracksActive.get().indexOf(atrack)+1
+                if(indexFind === -1){
+                    gp_set.setting.actives_tracks.splice(indexFind, 1)
+                    changeTracks[0] = true
+                    if(debug) console.log('Delete: ', atrack)
+                }
+            }
+        }
+
+        // Add not isset tracks
+        tracksActive.each((indx, currentTrack)=>{
+            if(!gp_set.setting.actives_tracks.includes(currentTrack)){
+                gp_set.setting.actives_tracks.push(currentTrack)
+                changeTracks[1] = true
+            }
+        })
+        if(changeTracks[0] || changeTracks[1]){
+            if(debug) console.log('Save...')
+            saveStorage();
+        }
+        if(debug) console.log('>>>',gp_set)
     }
 
     function init(){
@@ -2034,28 +2091,42 @@ li.li_style { display: inline-block;}\
             i_setting_div_del_button.addEventListener("click", setting_del_value);
 
             var checkbox_div = document.createElement("div");
+            var checkbox_div_0 = document.createElement("div");
+            var checkbox_div_1 = document.createElement("div");
+            var checkbox_div_2 = document.createElement("div");
+            var checkbox_div_3 = document.createElement("div");
+            var checkbox_div_4 = document.createElement("div");
+
+            checkbox_div_0.className = "tolko_ne_poluch"
+            checkbox_div_1.className = "setting_box"
+            checkbox_div_2.className = "user_codes_panel"
+            checkbox_div_3.className = "update_all_codes"
+            checkbox_div_4.className = "update_all_infos"
+
             var checkbox_input = document.createElement("input");
             var checkbox_label = document.createElement("label");
+            var checkbox_span = document.createElement("span");
+            var checkbox_button = document.createElement("div");
+
+            checkbox_span.innerText = sel_lang.tolko_ne_poluch
+            checkbox_button.innerHTML = `<span>${sel_lang.update_all_codes}</span><div class='progress_box'></div>`
+            checkbox_button.id = "checkbox_button"
 
             checkbox_div.className="checkbox_div";
-            checkbox_div.innerHTML="<span style=\"position: relative;top: 10px;    padding-right: 10px;\">"+ sel_lang.tolko_ne_poluch +"</span>";
 
             checkbox_input.type="checkbox";
             checkbox_input.className="checkbox";
             checkbox_input.id="checkbox";
 
             if(!gp_set.hasOwnProperty('setting')){
-                gp_set.setting={'tolko_ne_poluch':false};
+                gp_set.setting={};
+                gp_set.setting.tolko_ne_poluch = false
+                gp_set.setting.actives_tracks = []
             }
             checkbox_input.checked = gp_set.setting.tolko_ne_poluch;
 
             checkbox_label.setAttribute("for","checkbox");
-
             checkbox_label.addEventListener("click", only_ne_poluch_button);
-
-            checkbox_div.appendChild(checkbox_input);
-            checkbox_div.appendChild(checkbox_label);
-            checkbox_div.appendChild(i_setting);
 
             i_setting_div.appendChild(i_setting_div_caption);
             i_setting_div.appendChild(i_setting_div_body);
@@ -2065,49 +2136,138 @@ li.li_style { display: inline-block;}\
             i_setting_div_foot.appendChild(i_setting_div_del_button);
             i_setting_div.appendChild(i_setting_div_foot);
 
-            checkbox_div.appendChild(i_setting_div);
+            checkbox_div_0.appendChild(checkbox_span);
+            checkbox_div_0.appendChild(checkbox_input);
+            checkbox_div_0.appendChild(checkbox_label);
+
+            checkbox_div_1.appendChild(i_setting)
+            checkbox_div_1.appendChild(i_setting_div)
+
+            checkbox_div_3.appendChild(checkbox_button);
+
+            checkbox_div.appendChild(checkbox_div_0)
+            checkbox_div.appendChild(checkbox_div_1)
+            checkbox_div.appendChild(checkbox_div_2)
+
+            if(!CheckHost('courier')){
+                checkbox_div.appendChild(checkbox_div_3)
+                checkbox_div.appendChild(checkbox_div_4)
+            }
+
+            if(CheckHost('tracks')){
+                actives_tracks()
+            }
+
+            checkbox_button.addEventListener('click', checkAll)
+
             //document.getElementsByClassName("container")[1].lastChild.appendChild(checkbox_div);
-            document.getElementsByClassName("container")[2].parentNode.insertBefore(checkbox_div, document.getElementsByClassName("container")[2]);
+            //document.getElementsByClassName("container")[2].parentNode.insertBefore(checkbox_div, document.getElementsByClassName("container")[2]);
+            const pastPanel = document.querySelector('.page-track-list') || document.querySelector('.page-track')
+            pastPanel.insertBefore(checkbox_div, document.querySelector('.hidden-print'))
             //--------------------
             myTracks(); // Пользовательские коды
             NaprotuvKashdogo(); // Naprotiv kashdogo treka slushba ontsleshivaniya
             if (!checkLocation("/courier") && !checkLocation("/form")) make_abs(); // Make absolute window left
             upperPanel(); // Verxnya panel so slushbami otsleshivaniya
-            // checkAll();
 
         } catch (e){console.log(e);}
     }
 
-    function my(a){
-        if(a.length !== $(".tracking-number").length) {
-            setTimeout(my.bind("",a),100)
-        } else {
-            console.log(a)
-            let but = document.createElement("button")
-            but.innerText = "Go";
-            $(but).on('click', function(){
-                $.each(a,function(){
-                    $.ajax(a).done(function(resp){
-                        console.log(resp)
-                    });
-                })
-            });
-            document.body.appendChild(but)
-        }
+    function requestCheckAll(url){
+        return new Promise((resolve,reject)=>{
+            let xhr = new XMLHttpRequest;
+            xhr.open("GET", url.url)
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+            xhr.onload = function() {
+
+                if (xhr.status !== 200) return reject({result: "Request failed. Returned status of " + xhr.status, data:url})
+
+                if (xhr.getResponseHeader("Content-Type") === "application/json") {
+                    const _JSONparse = JSON.parse(xhr.responseText);
+
+                    let result = _JSONparse !== null && _JSONparse !== undefined ? _JSONparse : xhr.responseText
+                    if (!result) return reject({result:"Request failed. Invalid response.", data:url})
+                    if (!result.status){
+                        return resolve({result:result, data:url})
+                    }
+                    if (result.status === "error") {
+                        const _resultMessage = result.message && result.message !== undefined && result.message !== null ? result.message : "Unknown error"
+                        return reject({result: _resultMessage, data:url})
+
+                    }
+                    return result.status === "ok" ? resolve({result:result, data:url}) : reject({result: "Unknown result status: " + result.status, data:url})
+                }
+                resolve({result: xhr.responseText, data: url})
+            }
+            xhr.send(null)
+        })
     }
 
     function checkAll(){
-        let arr_link=[];
-        $.each($(".tracking-number"), function(ind, el){
-            $.ajax($(this).attr("href"))
-                .done(function(a){
-                let html = $(a),
-                    but = html.find(".btn-modal-ajax:eq(1)")
-                arr_link.push(but.attr("href"))
-                if(ind == $(".tracking-number").length-1) my(arr_link)
-            });
-        })
+        const btn_check_all_progress = document.querySelector('.progress_box')
+
+        if(btn_check_all_progress.classList.contains('progress_line')){
+            alert(sel_lang.update_all_tracks.worknow)
+            return
+        }
+
+        if(confirm(sel_lang.update_all_tracks.confirm)) {
+            new Promise((res,rej)=>{
+                let tn = $(".tracking-number"),
+                    len_tn = tn.length,
+                    links=[]
+
+                btn_check_all_progress.classList.add('progress_line')
+                const uat = $('.update_all_infos').empty()
+
+                $.each(tn, function(ind, el){
+                    $.ajax($(this).attr("href"))
+                        .done(function(a){
+                        let html = $(a),
+                            but = html.find(".buttons > a.btn:eq(0)").get(0)
+
+                        links.push({
+                            url:but.dataset.url,
+                            track: el.textContent
+                        })
+
+                        if(len_tn == links.length) res(links)
+                    })
+                        .fail(function(e){
+                        rej(new Error(e))
+                    });
+                })
+            }).then((links)=>{
+                const promises = links.map(l => requestCheckAll(l))
+
+                Promise.allSettled(promises).then((otvet) =>{
+                    btn_check_all_progress.classList.remove('progress_line')
+
+                    const stringJoin = otvet.map((result, index) => result.value?.result?.hasOwnProperty('html') ?sel_lang.update_all_tracks.already+result.value.data.track :sel_lang.update_all_tracks.ok+result.value.data.track),
+                          uat = $('.update_all_infos').empty()
+
+                    $.each(stringJoin, function(ind, el){
+                        let idx = (ind+1)*2,
+                            wait = idx*3000,
+                            div = $('<div>')
+                        .css({'dispaly': 'none'})
+                        .addClass('update_all_infos_item')
+                        .text(el)
+                        .appendTo(uat)
+                        .fadeIn(wait, function(){
+                            setTimeout(function(){
+                                div.fadeOut(wait, ()=>div.remove())
+                            }, idx*2000)
+                        })
+                        })
+                });
+            }, (err)=>{
+                btn_check_all_progress.classList.remove('progress_line')
+                if(err instanceof Error) alert(err.message)
+            })
+        }
     }
+
 
     init();
 
